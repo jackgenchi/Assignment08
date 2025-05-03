@@ -1,4 +1,4 @@
-import fetchEmployees, { } from './modules/init.js'
+import fetchEmployees from './modules/init.js'
 // Array has been transformed into JSON file and stored in ./data/employees.json
 // CREATE AN ARRAY OF EMPLOYEES
 // let arrEmployees = [
@@ -8,12 +8,6 @@ import fetchEmployees, { } from './modules/init.js'
 //     [14545423, "Robin Banks", 7867, "robin@vectacorp.com", "Marketing"],
 //     [13413453, "Sue Wedge", 1235, "sue@vectacorp.com", "QA"]
 // ]
-
-// BUILD THE EMPLOYEES TABLE WHEN THE PAGE LOADS
-// build grid is called in the fetchEmployees function
-let jsonToArray = [] 
-fetchEmployees(jsonToArray)
-
 
 // GET DOM ELEMENTS
 let empTable    = document.querySelector('#employees')
@@ -34,22 +28,24 @@ empTable.addEventListener('click', (e) => {
 })
 
 // BUILD THE EMPLOYEES GRID
-function buildGrid(array) {
+async function buildGrid(inputPromise) {
+    try {
+    let jsonEmp = await inputPromise
     // REMOVE THE EXISTING SET OF ROWS BY REMOVING THE ENTIRE TBODY SECTION
     empTable.lastElementChild.remove()
     // REBUILD THE TBODY FROM SCRATCH
     let tbody = document.createElement('tbody')
     // LOOP THROUGH THE ARRAY OF EMPLOYEES
     // REBUILDING THE ROW STRUCTURE
-    for (let employee of array) {
+    for (let person of jsonEmp.employee) {
         tbody.innerHTML += 
         `
         <tr>
-            <td>${employee[0]}</td>
-            <td>${employee[1]}</td>
-            <td>${employee[2]}</td>
-            <td><a href="mailto:${employee[3]}">${employee[3]}</a></td>
-            <td>${employee[4]}</td>
+            <td>${person.id}</td>
+            <td>${person.name}</td>
+            <td>${person.ext}</td>
+            <td><a href="mailto:${person.email}">${person.email}</a></td>
+            <td>${person.dept}</td>
             <td><button class="btn btn-sm btn-danger delete">X</button></td>
         </tr>
         `
@@ -57,7 +53,16 @@ function buildGrid(array) {
     // BIND THE TBODY TO THE EMPLOYEE TABLE
     empTable.appendChild(tbody)
     // UPDATE EMPLOYEE COUNT
-    empCount.value = `(${array.length})`
+    empCount.value = `(${jsonEmp.employee.length})`
+    }catch (err){
+        console.log(err)
+    }
+
 }
 
+// BUILD THE EMPLOYEES TABLE WHEN THE PAGE LOADS
+// build grid is called in the fetchEmployees function
+//fetchEmployees()
+const test = await fetchEmployees()
+buildGrid(test)
 export default buildGrid
