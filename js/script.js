@@ -1,13 +1,30 @@
-import fetchEmployees from './modules/init.js'
+import {fetchEmployees,pushEmployees} from './modules/init.js'
+
 // Array has been transformed into JSON file and stored in ./data/employees.json
 // CREATE AN ARRAY OF EMPLOYEES
-// let arrEmployees = [
-//     [34123413, "Zak Ruvalcaba", 3424, "zak@vectacorp.com", "Executive"],
-//     [23424665, "Sally Smith", 2344, "sally@vectacorp.com", "Administrative"],
-//     [12341244, "Mark Martin", 5352, "mark@vectacorp.com", "Sales"],
-//     [14545423, "Robin Banks", 7867, "robin@vectacorp.com", "Marketing"],
-//     [13413453, "Sue Wedge", 1235, "sue@vectacorp.com", "QA"]
-// ]
+let arrEmployees = [
+    [34123413, "Zak Ruvalcaba", 3424, "zak@vectacorp.com", "Executive"],
+    [23424665, "Sally Smith", 2344, "sally@vectacorp.com", "Administrative"],
+    [12341244, "Mark Martin", 5352, "mark@vectacorp.com", "Sales"],
+    [14545423, "Robin Banks", 7867, "robin@vectacorp.com", "Marketing"],
+    [13413453, "Sue Wedge", 1235, "sue@vectacorp.com", "QA"]
+]
+// example code demonstrating turning array into json object data
+const arrKeys = ["id","name","ext","email","dept"]
+let tempArr = {}
+let tempArr2 = []
+for(let i of arrEmployees) {
+    for(let j = 0; j < i.length; j++) {
+        tempArr[arrKeys[j]] = i[j]
+    }
+    tempArr2.push(tempArr)
+    tempArr = {}
+}
+console.log("JSON employees")
+console.log(JSON.stringify(tempArr2))
+//Then send the data to be pushed to employees.json via the pushEmployees function in init.js
+pushEmployees(tempArr2)
+
 
 // GET DOM ELEMENTS
 let empTable    = document.querySelector('#employees')
